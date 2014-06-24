@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+
+<head>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- This <head> section is only used for static prototyping purposes. At runtime, -->
+    <!-- Tiles will only use the body fragment defined with tiles:fragment="content",  --> 
+    <!-- as specified at the corresponding views.xml file.                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <title>DOJO Spring Web Flow</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        
+    <link rel="stylesheet" type="text/css" media="screen" 
+          href="../../../styles/kayak.css" />
+    
+</head>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- START of the content to be included in the execution result.  -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- Only the markup inside this <body> would be required in this  -->
+<!-- template if no static prototyping was intended.               -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<body tiles:fragment="content">
+    
+    
+	<body>
+		<div>
+			<h2>R&eacute;capitulatif</h2>			
+			<div>
+				<div>Votre commande est bien enregistr&eacute;e. Merci de votre confiance.</div>
+				<div>
+					<form method="post" th:action="${flowExecutionUrl}">
+							<input type="submit" value="Retourner au Shop" name="_eventId_continue"/>
+					</form>
+				</div>
+				<br/>
+				<div>
+					<table>
+						<tr>
+							<td>Nom</td><td th:text="${orderInfo.lastName}">Dupont</td>
+						</tr>
+						<tr>
+							<td>Pr&eacute;nom</td><td th:text="${orderInfo.firstName}">Alfred</td>
+						</tr>
+						<tr>
+							<td>Adresse</td><td th:text="${orderInfo.adress}">1 rue du test</td>
+						</tr>
+						<tr>
+							<td>Num&eacute;ro de carte</td><td th:text="${orderInfo.creditCardNumber}">0123XXXXXXXX</td>
+						</tr>
+					</table>
+				</div>
+				<br/>
+				<div th:if="${shoppingCart.itemCount}>0">					
+					<table>
+						<tr>
+							<th>Article</th>
+							<th>Quantit&eacute;</th>
+							<th>Prix unitaire</th>
+							<th>Total</th>
+						</tr>
+						
+						<tr th:each="item : ${shoppingCart.items}">
+								<td th:text="${item.product.description}">Description</td>
+								<td th:text="${item.quantity}">2</td>
+								<td th:text="${item.unitPrice}">3</td>
+								<td th:text="${item.totalPrice}">6</td>
+						</tr>					
+						
+						<tr>
+							<td>TOTAL:</td>
+							<td></td>
+							<td></td>
+							<td th:text="${shoppingCart.totalPrice}">99</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>    
+    
+
+</body>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- END of the content to be included in the execution result -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+</html>

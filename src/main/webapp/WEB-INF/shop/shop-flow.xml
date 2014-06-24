@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="
+      	http://www.springframework.org/schema/webflow
+      	http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<on-start>
+		<evaluate expression="cartService.getProducts()" result="flowScope.products"/>
+		<evaluate expression="cartService.getShoppingCart()" result="flowScope.shoppingCart"/>
+	</on-start>
+		
+	<view-state id="catalog">
+		<on-render>
+			<render fragments="body" />			
+		</on-render>
+		<transition on="addItem" to="addItem">
+			<set name="requestScope.productId" value="requestParameters.productId" type="long" />
+		</transition>
+		<transition on="cart" to="cart"/>
+	</view-state>
+	
+	<action-state id="addItem">
+		<evaluate expression="flowScope.shoppingCart.addItem(cartService.getProduct(requestScope.productId))"/>
+		<transition on="*" to="catalog" />
+	</action-state>
+	
+	<view-state id="cart">
+		<on-render>
+			<render fragments="body" />			
+		</on-render>
+		<transition on="return" to="catalog"/>
+		<transition on="checkout" to="decideCheckout"/>
+	</view-state>
+	
+	<decision-state id="decideCheckout">
+		<if test="flowScope.shoppingCart.getItemCount()>0" then="checkout" else="errorEmptyCart"/>
+	</decision-state>
+	
+	<subflow-state id="checkout" subflow="checkout">
+		<input name="shoppingCart" value="flowScope.shoppingCart"/>
+    	<transition on="cartCheckout" to="catalog">
+        	<evaluate expression="flowScope.shoppingCart.clear()" />  
+    	</transition>
+    	<transition on="checkoutCancelled" to="cart" />
+	</subflow-state>
+	
+	<view-state id="errorEmptyCart">
+		<on-render>
+			<render fragments="body" />			
+		</on-render>
+		<transition on="return" to="catalog"/>	
+	</view-state>
+	
+	<end-state id="exit" view="externalRedirect:/" />
+
+	<global-transitions>
+		<transition on="exit" to="exit"/>
+	</global-transitions>
+	
+</flow>

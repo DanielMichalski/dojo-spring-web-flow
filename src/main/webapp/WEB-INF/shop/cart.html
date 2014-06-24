@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+
+<head>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- This <head> section is only used for static prototyping purposes. At runtime, -->
+    <!-- Tiles will only use the body fragment defined with tiles:fragment="content",  --> 
+    <!-- as specified at the corresponding views.xml file.                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <title>DOJO Spring Web Flow</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        
+    <link rel="stylesheet" type="text/css" media="screen" 
+          href="../../../styles/kayak.css" />
+    
+</head>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- START of the content to be included in the execution result.  -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- Only the markup inside this <body> would be required in this  -->
+<!-- template if no static prototyping was intended.               -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<body tiles:fragment="content">
+    
+    
+	<body>
+		<div id="bd">
+			<div>
+				<form method="post" th:action="${flowExecutionUrl}">
+   					<input type="submit" value="Retour au catalogue" name="_eventId_return"/>
+				</form>
+			</div>
+		</div>
+		<div>
+			<h2>Votre panier</h2>			
+			<div>
+				<div th:unless="${shoppingCart.itemCount}>0">Votre panier est vide</div>
+				<div th:if="${shoppingCart.itemCount}>0">					
+					<table>
+						<tr>
+							<th>Article</th>
+							<th>Quantit&eacute;</th>
+							<th>Prix unitaire</th>
+							<th>Total</th>
+						</tr>
+						
+						<tr th:each="item : ${shoppingCart.items}">
+								<td th:text="${item.product.description}">Description</td>
+								<td th:text="${item.quantity}">2</td>
+								<td th:text="${item.unitPrice}">5</td>
+								<td th:text="${item.totalPrice}">10</td>
+						</tr>					
+						
+						<tr>
+							<td>TOTAL:</td>
+							<td></td>
+							<td></td>
+							<td th:text="${shoppingCart.totalPrice}">99</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div>
+				<form method="post" th:action="${flowExecutionUrl}">
+   					<input type="submit" value="Valider la commande" name="_eventId_checkout"/>
+				</form>
+			</div>
+		</div>
+	</body>    
+    
+
+</body>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- END of the content to be included in the execution result -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+</html>
